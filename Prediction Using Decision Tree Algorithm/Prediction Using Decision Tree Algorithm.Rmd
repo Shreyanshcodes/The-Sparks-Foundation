@@ -1,0 +1,64 @@
+---
+title: "Prediction Using Decision Tree Algorithm"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+#### Decision Tree Algorithm
+##### Importing and reading IRIS Dataset
+
+```{r}
+data <- read.csv("Iris.csv")
+head(data)
+```
+ 
+#### Summary of the dataset
+
+```{r}
+summary(data)
+str(data)
+```
+
+##### Extracting Features from the dataset
+```{r}
+keeps <- c("SepalLengthCm","SepalWidthCm","PetalLengthCm","PetalWidthCm","Species")
+df = data[keeps]
+head(df)
+```
+##### Loading the required library rpart for the decision tree
+```{r}
+library("rpart")
+library("rpart.plot")
+```
+##### Splitting dataset in training and the testing set.
+```{r}
+indexes = sample(150, 110)
+iris_train = df[indexes,]
+iris_test = df[-indexes,]
+iris_train
+iris_test
+```
+
+##### Setting taret value and input for the tree
+
+```{r}
+target = Species ~  PetalLengthCm+ PetalWidthCm+SepalLengthCm + SepalWidthCm 
+tree = rpart(target, data = iris_train, method = "class")
+rpart.plot(tree)
+
+```
+
+
+##### Now once the model is built we can test it against the test set and predict the species
+
+```{r}
+predictions = predict(tree, iris_test,type='class')
+table(predictions, iris_test$Species)
+predictions
+(predictions == iris_test$Species)
+sum(predictions == iris_test$Species)
+cp <- sum(predictions == iris_test$Species)
+sprintf("No. of correct predictions : %i", cp)
+```
