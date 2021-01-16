@@ -1,0 +1,53 @@
+---
+title: "Prediction using supervised ML"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### GRIP TASK 1
+#### TASK 1 : Student Marks Dataset
+##### Reading The dataset 
+
+```{r}
+data <- read.csv("studentMarksDataset.csv")
+print(data)
+```
+##### Summary of the dataset
+```{r}
+summary(data)
+```
+##### Extracting Variables from the dataset
+
+```{r}
+hours <- data$Hours
+scores <- data$Scores
+print(hours)
+print(scores)
+```
+
+##### Creating a the LINEAR REGRESSION MODEL for the dataset
+
+```{r}
+SMmodel <- lm(scores~hours)
+SMmodel
+
+```
+##### Visualizing the Plot for the model 
+
+```{r}
+plot(hours,scores,col = "hotpink",main = "Hours & Scores Regression",
+abline(SMmodel),cex = 1.3,pch = 16,xlab = "Hours",ylab = "Scores")
+```
+
+
+###### Let's predict the Score of a student according to the given study hours..
+###### Predicting the Score taking the study hours to be 9.25hrs
+
+```{r}
+pred<-data.frame(hours=9.25)
+res<- predict(SMmodel,pred)
+print(res)
+```
